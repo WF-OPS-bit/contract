@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.security.mapper.MenuMapper">
+
+    <!--    通过用户id查询菜单信息-->
+    <select id="listMenuByUserId" parameterType="long" resultType="com.ar.contractreview.entity.SysMenu">
+        SELECT m.*
+        FROM sys_menu m
+        INNER JOIN sys_role_menu rm ON m.id = rm.menu_id
+        WHERE rm.role_id = (SELECT role_id FROM sys_user WHERE id = #{userId})
+    </select>
+
+</mapper>
