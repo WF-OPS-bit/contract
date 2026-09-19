@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractReviewRuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractReviewRule">
+        <id column="id" property="id" />
+        <result column="rule_no" property="ruleNo" />
+        <result column="rule_name" property="ruleName" />
+        <result column="rule_type" property="ruleType" />
+        <result column="contract_type" property="contractType" />
+        <result column="clause_keyword" property="clauseKeyword" />
+        <result column="rule_config" property="ruleConfig" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="priority" property="priority" />
+        <result column="status" property="status" />
+        <result column="description" property="description" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, rule_no, rule_name, rule_type, contract_type, clause_keyword, rule_config, risk_level, priority, status, description, created_by, created_time, updated_by, updated_time, deleted
+    </sql>
+
+</mapper>
