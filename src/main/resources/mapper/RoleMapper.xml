@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.security.mapper.RoleMapper">
+
+<!--    通过用户id查询角色-->
+    <select id="listRoleByUserId" parameterType="long" resultType="com.ar.contractreview.entity.SysRole">
+        SELECT * FROM sys_role WHERE id = (SELECT role_id FROM sys_user WHERE id = #{userId})
+    </select>
+</mapper>
