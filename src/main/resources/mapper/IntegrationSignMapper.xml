@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.IntegrationSignMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.IntegrationSign">
+        <id column="id" property="id" />
+        <result column="sign_type" property="signType" />
+        <result column="sign_name" property="signName" />
+        <result column="status" property="status" />
+        <result column="app_id" property="appId" />
+        <result column="app_key" property="appKey" />
+        <result column="certificate_path" property="certificatePath" />
+        <result column="certificate_number" property="certificateNumber" />
+        <result column="certificate_expire_date" property="certificateExpireDate" />
+        <result column="description" property="description" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, sign_type, sign_name, status, app_id, app_key, certificate_path, certificate_number, certificate_expire_date, description, created_by, created_time, updated_by, updated_time
+    </sql>
+
+</mapper>

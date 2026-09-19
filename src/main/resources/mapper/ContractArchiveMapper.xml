@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractArchiveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractArchive">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="contract_no" property="contractNo" />
+        <result column="contract_name" property="contractName" />
+        <result column="contract_type" property="contractType" />
+        <result column="party_a" property="partyA" />
+        <result column="party_b" property="partyB" />
+        <result column="amount" property="amount" />
+        <result column="archive_code" property="archiveCode" />
+        <result column="archive_location" property="archiveLocation" />
+        <result column="archive_time" property="archiveTime" />
+        <result column="archive_user_id" property="archiveUserId" />
+        <result column="archive_user_name" property="archiveUserName" />
+        <result column="storage_type" property="storageType" />
+        <result column="retention_period" property="retentionPeriod" />
+        <result column="expire_date" property="expireDate" />
+        <result column="description" property="description" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_id, contract_no, contract_name, contract_type, party_a, party_b, amount, archive_code, archive_location, archive_time, archive_user_id, archive_user_name, storage_type, retention_period, expire_date, description, created_time, updated_time
+    </sql>
+
+</mapper>

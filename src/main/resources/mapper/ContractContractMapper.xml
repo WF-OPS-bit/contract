@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractContractMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractContract">
+        <id column="id" property="id" />
+        <result column="contract_no" property="contractNo" />
+        <result column="contract_name" property="contractName" />
+        <result column="contract_type" property="contractType" />
+        <result column="party_a" property="partyA" />
+        <result column="party_b" property="partyB" />
+        <result column="amount" property="amount" />
+        <result column="sign_date" property="signDate" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="file_url" property="fileUrl" />
+        <result column="file_type" property="fileType" />
+        <result column="file_size" property="fileSize" />
+        <result column="status" property="status" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="risk_score" property="riskScore" />
+        <result column="ai_review_time" property="aiReviewTime" />
+        <result column="reviewer_id" property="reviewerId" />
+        <result column="reviewer_name" property="reviewerName" />
+        <result column="review_time" property="reviewTime" />
+        <result column="review_comment" property="reviewComment" />
+        <result column="upload_user_id" property="uploadUserId" />
+        <result column="upload_user_name" property="uploadUserName" />
+        <result column="upload_time" property="uploadTime" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_no, contract_name, contract_type, party_a, party_b, amount, sign_date, start_date, end_date, file_url, file_type, file_size, status, risk_level, risk_score, ai_review_time, reviewer_id, reviewer_name, review_time, review_comment, upload_user_id, upload_user_name, upload_time, created_time, updated_time, deleted
+    </sql>
+
+</mapper>
