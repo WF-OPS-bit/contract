@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ProcessTaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ProcessTask">
+        <id column="id" property="id" />
+        <result column="task_code" property="taskCode" />
+        <result column="instance_id" property="instanceId" />
+        <result column="process_id" property="processId" />
+        <result column="node_id" property="nodeId" />
+        <result column="node_name" property="nodeName" />
+        <result column="node_type" property="nodeType" />
+        <result column="contract_id" property="contractId" />
+        <result column="contract_no" property="contractNo" />
+        <result column="assignee_id" property="assigneeId" />
+        <result column="assignee_name" property="assigneeName" />
+        <result column="status" property="status" />
+        <result column="priority" property="priority" />
+        <result column="title" property="title" />
+        <result column="description" property="description" />
+        <result column="deadline" property="deadline" />
+        <result column="start_time" property="startTime" />
+        <result column="complete_time" property="completeTime" />
+        <result column="result" property="result" />
+        <result column="comment" property="comment" />
+        <result column="creator_id" property="creatorId" />
+        <result column="creator_name" property="creatorName" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, task_code, instance_id, process_id, node_id, node_name, node_type, contract_id, contract_no, assignee_id, assignee_name, status, priority, title, description, deadline, start_time, complete_time, result, comment, creator_id, creator_name, created_time, updated_time
+    </sql>
+
+</mapper>

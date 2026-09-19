@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractReviewResultMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractReviewResult">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="risk_score" property="riskScore" />
+        <result column="total_risks" property="totalRisks" />
+        <result column="high_risks" property="highRisks" />
+        <result column="medium_risks" property="mediumRisks" />
+        <result column="low_risks" property="lowRisks" />
+        <result column="conclusion" property="conclusion" />
+        <result column="report_url" property="reportUrl" />
+        <result column="matching_count" property="matchingCount" />
+        <result column="modified_count" property="modifiedCount" />
+        <result column="missing_count" property="missingCount" />
+        <result column="added_count" property="addedCount" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_id, risk_level, risk_score, total_risks, high_risks, medium_risks, low_risks, conclusion, report_url, matching_count, modified_count, missing_count, added_count, created_time, updated_time
+    </sql>
+
+</mapper>

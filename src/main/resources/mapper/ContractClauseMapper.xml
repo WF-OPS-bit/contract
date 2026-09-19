@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractClauseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractClause">
+        <id column="id" property="id" />
+        <result column="clause_code" property="clauseCode" />
+        <result column="clause_name" property="clauseName" />
+        <result column="clause_category" property="clauseCategory" />
+        <result column="contract_type" property="contractType" />
+        <result column="content" property="content" />
+        <result column="standard_content" property="standardContent" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="sort_order" property="sortOrder" />
+        <result column="status" property="status" />
+        <result column="description" property="description" />
+        <result column="legal_basis" property="legalBasis" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, clause_code, clause_name, clause_category, contract_type, content, standard_content, risk_level, sort_order, status, description, legal_basis, created_by, created_time, updated_by, updated_time, deleted
+    </sql>
+
+</mapper>
