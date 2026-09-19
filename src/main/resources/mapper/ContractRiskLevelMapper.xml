@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractRiskLevelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractRiskLevel">
+        <id column="id" property="id" />
+        <result column="risk_code" property="riskCode" />
+        <result column="risk_name" property="riskName" />
+        <result column="risk_color" property="riskColor" />
+        <result column="score_min" property="scoreMin" />
+        <result column="score_max" property="scoreMax" />
+        <result column="description" property="description" />
+        <result column="handling_suggestion" property="handlingSuggestion" />
+        <result column="status" property="status" />
+        <result column="sort_order" property="sortOrder" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, risk_code, risk_name, risk_color, score_min, score_max, description, handling_suggestion, status, sort_order, created_by, created_time, updated_by, updated_time
+    </sql>
+
+</mapper>
