@@ -1,0 +1,21 @@
+#全局配置的作用是为了改框架参数
+spring:
+  application:
+    name: springboot-mp
+  datasource:
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://bobo-mysql:3306/contract_review
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      table-prefix: t_  当你不配置这个前缀的时候 那么表的名字 默认就是实体的名字
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: -1
+  type-aliases-package: com.ar.contractreview.entity

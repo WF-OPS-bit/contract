@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.IntegrationOaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.IntegrationOa">
+        <id column="id" property="id" />
+        <result column="oa_type" property="oaType" />
+        <result column="oa_name" property="oaName" />
+        <result column="status" property="status" />
+        <result column="app_id" property="appId" />
+        <result column="app_secret" property="appSecret" />
+        <result column="access_token" property="accessToken" />
+        <result column="token_expire_time" property="tokenExpireTime" />
+        <result column="sync_status" property="syncStatus" />
+        <result column="last_sync_time" property="lastSyncTime" />
+        <result column="description" property="description" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, oa_type, oa_name, status, app_id, app_secret, access_token, token_expire_time, sync_status, last_sync_time, description, created_by, created_time, updated_by, updated_time
+    </sql>
+
+</mapper>
