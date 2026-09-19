@@ -1,0 +1,38 @@
+# 合同智能审核系统 - 应用配置
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: contract-approval-system
+  servlet:
+    multipart:
+      # 9.3 模板文件上传大小限制(默认只有 1MB,docx 很容易超)
+      max-file-size: 20MB
+      max-request-size: 20MB
+  datasource:
+    # 老师数据库 ${DB_HOST:127.0.0.1} (contract_review 已建好 27 张表)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:3306/contract_review?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      # 注意：数据库表名就是 sys_user / contract_contract 等（无 t_ 前缀），
+      # 因此不配置 table-prefix，实体 SysUser 直接映射表 sys_user
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: -1
+  type-aliases-package: com.ar.contractreview.entity
+
+# JWT 配置（SpringSecurity 登录用）
+jwt:
+  token:
+    expire: 60
+    sign: ${JWT_SIGN:please-change-this-secret-key}
