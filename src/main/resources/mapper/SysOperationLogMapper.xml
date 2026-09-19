@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.SysOperationLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.SysOperationLog">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="operation_type" property="operationType" />
+        <result column="module" property="module" />
+        <result column="description" property="description" />
+        <result column="request_url" property="requestUrl" />
+        <result column="request_method" property="requestMethod" />
+        <result column="request_param" property="requestParam" />
+        <result column="response_result" property="responseResult" />
+        <result column="ip_address" property="ipAddress" />
+        <result column="user_agent" property="userAgent" />
+        <result column="execution_time" property="executionTime" />
+        <result column="success" property="success" />
+        <result column="error_message" property="errorMessage" />
+        <result column="created_time" property="createdTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, user_name, operation_type, module, description, request_url, request_method, request_param, response_result, ip_address, user_agent, execution_time, success, error_message, created_time
+    </sql>
+
+</mapper>
