@@ -1,0 +1,20 @@
+stages:
+  - build
+  - package
+
+before_script:
+  - mvn -v
+
+build-job:
+  stage: build
+  script:
+    - mvn clean compile
+
+package-job:
+  stage: package
+  script:
+    - mvn package -DskipTests
+    - ls -la target/*.jar
+  artifacts:
+    paths:
+      - target/*.jar

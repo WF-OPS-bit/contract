@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  # 不过滤分支名，任何分支的 push / PR 都会触发
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Build & Package"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # master 分支是 Java 8 脚手架，其余模块分支是 Java 21，按 pom 自动选 JDK
+      - name: Detect Java version from pom.xml
+        id: jv
+        run: |
+          V=$(sed -n 's/.*<java.version>\(.*\)<\/java.version>.*/\1/p' pom.xml | head -n 1)
+          echo "raw java.version = [${V}]"
+          case "$V" in
+            1.8|8)   echo "version=8"  >> "$GITHUB_OUTPUT" ;;
+            11)      echo "version=11" >> "$GITHUB_OUTPUT" ;;
+            17)      echo "version=17" >> "$GITHUB_OUTPUT" ;;
+            21)      echo "version=21" >> "$GITHUB_OUTPUT" ;;
+            *)       echo "version=21" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Set up JDK ${{ steps.jv.outputs.version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ steps.jv.outputs.version }}
+          cache: maven
+
+      - name: Build (mvn clean compile)
+        run: mvn -B -ntp clean compile
+
+      - name: Package (mvn package -DskipTests)
+        run: mvn -B -ntp package -DskipTests
+
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
+          if-no-files-found: error
+          retention-days: 7
