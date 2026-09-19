@@ -1,5 +1,12 @@
-/target/
+HELP.md
+target/
 !.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+# 忽略具体文件
+# 使用相对路径
+src/main/java/com/example/demo/DemoApplication.java
+test.http
 
 ### STS ###
 .apt_generated
@@ -18,8 +25,18 @@
 
 ### NetBeans ###
 /nbproject/private/
-/build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### 运行日志 ###
+app_test.log
+app_test.log.err
+*.log
