@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ProcessInstanceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ProcessInstance">
+        <id column="id" property="id" />
+        <result column="instance_code" property="instanceCode" />
+        <result column="process_id" property="processId" />
+        <result column="process_name" property="processName" />
+        <result column="contract_id" property="contractId" />
+        <result column="contract_no" property="contractNo" />
+        <result column="status" property="status" />
+        <result column="current_node_id" property="currentNodeId" />
+        <result column="current_node_name" property="currentNodeName" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="creator_name" property="creatorName" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, instance_code, process_id, process_name, contract_id, contract_no, status, current_node_id, current_node_name, start_time, end_time, creator_id, creator_name, created_time, updated_time
+    </sql>
+
+</mapper>

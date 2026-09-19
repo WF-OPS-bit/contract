@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.IntegrationApiLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.IntegrationApiLog">
+        <id column="id" property="id" />
+        <result column="api_id" property="apiId" />
+        <result column="api_name" property="apiName" />
+        <result column="api_path" property="apiPath" />
+        <result column="http_method" property="httpMethod" />
+        <result column="request_time" property="requestTime" />
+        <result column="request_ip" property="requestIp" />
+        <result column="request_param" property="requestParam" />
+        <result column="response_code" property="responseCode" />
+        <result column="response_data" property="responseData" />
+        <result column="status" property="status" />
+        <result column="error_message" property="errorMessage" />
+        <result column="execution_time" property="executionTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, api_id, api_name, api_path, http_method, request_time, request_ip, request_param, response_code, response_data, status, error_message, execution_time
+    </sql>
+
+</mapper>
