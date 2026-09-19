@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.SysBackupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.SysBackup">
+        <id column="id" property="id" />
+        <result column="backup_name" property="backupName" />
+        <result column="backup_type" property="backupType" />
+        <result column="backup_path" property="backupPath" />
+        <result column="backup_size" property="backupSize" />
+        <result column="backup_status" property="backupStatus" />
+        <result column="backup_time" property="backupTime" />
+        <result column="file_count" property="fileCount" />
+        <result column="description" property="description" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, backup_name, backup_type, backup_path, backup_size, backup_status, backup_time, file_count, description, created_by, created_time, updated_time, deleted
+    </sql>
+
+</mapper>
