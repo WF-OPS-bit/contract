@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ar.contractreview.mapper.ContractRiskClauseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ar.contractreview.entity.ContractRiskClause">
+        <id column="id" property="id" />
+        <result column="contract_id" property="contractId" />
+        <result column="review_result_id" property="reviewResultId" />
+        <result column="clause_no" property="clauseNo" />
+        <result column="clause_title" property="clauseTitle" />
+        <result column="clause_content" property="clauseContent" />
+        <result column="page" property="page" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="risk_type" property="riskType" />
+        <result column="risk_description" property="riskDescription" />
+        <result column="suggestion" property="suggestion" />
+        <result column="legal_basis" property="legalBasis" />
+        <result column="status" property="status" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, contract_id, review_result_id, clause_no, clause_title, clause_content, page, risk_level, risk_type, risk_description, suggestion, legal_basis, status, created_time, updated_time
+    </sql>
+
+</mapper>
