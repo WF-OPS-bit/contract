@@ -7,7 +7,6 @@ spring:
   application:
     name: contract-approval-system
   datasource:
-    # 老师数据库 ${DB_HOST:127.0.0.1} (contract_review 已建好 27 张表)
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DB_HOST:127.0.0.1}:3306/contract_review?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
     username: ${DB_USER:root}
