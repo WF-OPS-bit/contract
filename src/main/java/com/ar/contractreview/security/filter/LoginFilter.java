@@ -140,7 +140,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //把信息返回给客户端
         HttpResponseUtils.sendResponse(response,R.ok()
                 .data("token",token)
-                .data("username",securityUser.getUsername()));
+                .data("username",securityUser.getUsername())
+                .data("roleId",securityUser.getUser().getRoleId()));
         log.info("{}:登录成功....",securityUser.getUsername());
     }
 
