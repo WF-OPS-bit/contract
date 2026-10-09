@@ -57,6 +57,14 @@
             <version>8.0.30</version>
         </dependency>
 
+        <!-- H2 内存数据库：仅用于本机没有 MySQL 时的 h2 profile（见 application-h2.yml）。
+             生产环境仍走 MySQL，该依赖不会被激活。 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- 版本升级说明：Druid 升级至 1.2.23
              这个是数据库的连接池
          -->

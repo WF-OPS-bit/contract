@@ -91,6 +91,12 @@ public class StatisticsController {
             } else if ("NONE".equals(level)) {
                 none++;
             }
+            // 注意：Python 侧最高风险等级是 CRITICAL，上一版这里没有分支，
+            // 导致被 AI 判为极高风险的合同在“风险分布”里凭空消失（总数对不上）。
+            // 现在把 CRITICAL 也计入高风险数。
+            else if ("CRITICAL".equals(level)) {
+                high++;
+            }
         }
         Map<String,Object> riskDistribution = new LinkedHashMap<>();
         riskDistribution.put("high",high);

@@ -31,8 +31,34 @@ mybatis-plus:
       logic-delete-value: -1
   type-aliases-package: com.ar.contractreview.entity
 
+# MyBatis-Plus 分页插件方言（自建配置项，非 MP 官方属性）。
+# 默认 MYSQL；H2 profile 下由 application-h2.yml 覆盖为 H2。
+app:
+  datasource:
+    db-type: ${APP_DB_TYPE:MYSQL}
+
 # JWT 配置（SpringSecurity 登录用）
 jwt:
   token:
     expire: 60
     sign: ${JWT_SIGN:contract-review-jwt-secret-change-in-production-2026-secure}
+
+# ---------------------------------------------------------------------------
+# Python AI 服务（FastAPI）—— Java 后端内部调用，前端不直连
+#   启动方式： cd python-ai-service && python run.py
+# ---------------------------------------------------------------------------
+python:
+  ai:
+    base-url: ${PYTHON_AI_BASE_URL:http://localhost:8000}
+    # 连接超时：Python 没启动时要快速失败，不要挂住请求
+    connect-timeout-seconds: 5
+    # 读超时：真实 LLM 审核长文本较慢，给足余量；offline 模式毫秒级返回
+    read-timeout-seconds: 300
+
+# ---------------------------------------------------------------------------
+# 合同文件存储目录（上传后按 UUID 重命名落盘）
+# 默认放在运行目录的 upload/contracts 下，避免依赖 D 盘
+# ---------------------------------------------------------------------------
+contract:
+  upload:
+    dir: ${CONTRACT_UPLOAD_DIR:${user.dir}/upload/contracts/}

@@ -1,0 +1,66 @@
+# ===========================================================================
+# 本地开发 profile：H2 内存数据库
+# ===========================================================================
+# 用途：本机没有安装 MySQL 时，也能把「前端 → Java → Python」整条链路跑起来。
+#
+# 启动方式：
+#   mvnw spring-boot:run -Dspring-boot.run.profiles=h2
+#   或
+#   java -jar target/contract-approval-system.jar --spring.profiles.active=h2
+#
+# 数据来源：src/main/resources/db/h2/schema.sql + data.sql
+#   （由 tools/convert_sql_to_h2.py 从根目录 contract.sql 自动转换生成）
+#   schema.sql = 27 张表建表语句；data.sql = 种子数据
+#
+# ⚠️ 内存库，进程退出数据即消失，每次启动都按脚本重建，仅用于开发/联调。
+# ===========================================================================
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    # MODE=MySQL          用 MySQL 语法解析（AUTO_INCREMENT / DATETIME 等）
+    # DATABASE_TO_LOWER   表名、列名统一转小写，和 MySQL 行为一致
+    # CASE_INSENSITIVE_IDENTIFIERS  忽略标识符大小写，避免大小写不匹配
+    # DB_CLOSE_DELAY=-1   连接全部关闭后不销毁内存库（否则连接池空闲回收后数据丢失）
+    url: jdbc:h2:mem:contract_review;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    type: com.alibaba.druid.pool.DruidDataSource
+  sql:
+    init:
+      mode: always
+      # 脚本里有大量中文注释与种子数据，必须显式声明 UTF-8，
+      # 否则会按平台默认编码（Windows 下是 GBK）读取，导致 SQL 解析错乱
+      encoding: UTF-8
+      schema-locations: classpath:db/h2/schema.sql
+      data-locations: classpath:db/h2/data.sql
+      continue-on-error: false
+  h2:
+    console:
+      # 浏览器打开 http://localhost:8081/api/h2-console 可直接查看内存库数据
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+
+mybatis-plus:
+  # H2 分页方言（MySQL 方言生成的 LIMIT ?,? 在 H2 下不可靠）
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+app:
+  datasource:
+    db-type: H2
+
+# 关闭 p6spy 的 DataSource 装饰器。
+# 它会把 URL 改写成 jdbc:p6spy:h2:...，对内存库没有价值；
+# 而且单设 decorator.datasource.p6spy.enable-logging=false 在 1.9.0 上并不生效
+# （实测 ConnectionWrapper 依然被包上），所以这里直接关总开关。
+# 需要看 SQL 时靠 MyBatis-Plus 的 StdOutImpl（下面已开启）。
+decorator:
+  datasource:
+    enabled: false
+
+logging:
+  level:
+    com.ar.contractreview: DEBUG

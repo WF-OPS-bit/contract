@@ -50,8 +50,11 @@ public class ContractCommentController {
     @PostMapping
     public R add(@RequestBody ContractComment comment) {
         // 服务端统一填充批注人信息与状态,避免前端伪造
+        // ⚠️ user_role 在库里是 NOT NULL，之前没赋值导致新增批注必然报
+        //    "NULL not allowed for column user_role"，这里从登录态的角色信息补上
         comment.setUserId(SecurityUtils.currentUserId())
                 .setUserName(SecurityUtils.currentUsername())
+                .setUserRole(SecurityUtils.currentUserRole())
                 .setStatus("ACTIVE")
                 .setCreatedTime(LocalDateTime.now())
                 .setUpdatedTime(LocalDateTime.now());
