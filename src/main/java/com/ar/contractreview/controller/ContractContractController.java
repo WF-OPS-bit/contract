@@ -35,14 +35,25 @@ public class ContractContractController {
     private static final Set<String> ALLOWED_EXT =
             Set.of("pdf", "doc", "docx", "xls", "xlsx", "txt", "jpg", "png");
     /**
-     * 上传目录：默认 D:/contract-files/，可通过 JVM 参数 -Dcontract.upload.dir=... 覆盖（便于测试/部署）。
+     * 上传目录：由 contract.upload.dir 配置（默认运行目录下 upload/contracts/），
+     * 仍兼容 -Dcontract.upload.dir=... 的 JVM 参数覆盖方式（便于测试/部署）。
      */
     private String uploadDir() {
+        if (org.springframework.util.StringUtils.hasText(configuredUploadDir)) {
+            return configuredUploadDir;
+        }
         return System.getProperty("contract.upload.dir", "D:/contract-files/");
     }
 
+    /** 合同文件上传目录（application.yml: contract.upload.dir） */
+    @org.springframework.beans.factory.annotation.Value("${contract.upload.dir:${user.dir}/upload/contracts/}")
+    private String configuredUploadDir;
+
     @Autowired
     private ContractContractService contractContractService;
+
+    @Autowired
+    private com.ar.contractreview.service.AiReviewService aiReviewService;
 
     private R paramFail(String msg) {
         return R.fail(ResponseCode.PARAMETER_EXCEPTION.getCode(), msg);
@@ -71,7 +82,7 @@ public class ContractContractController {
         file.transferTo(dest);
 
         ContractContract c = new ContractContract()
-                .setContractNo("CT" + LocalDate.now().toString().replace("-", "") + System.currentTimeMillis())
+                .setContractNo(generateContractNo())
                 .setContractName(contractName).setContractType(contractType)
                 .setPartyA(partyA).setPartyB(partyB).setAmount(amount)
                 .setFileUrl("/files/contracts/" + filename).setFileType(ext).setFileSize(file.getSize())
@@ -90,7 +101,17 @@ public class ContractContractController {
             dest.delete();   // 落库失败时清理已写盘的孤儿文件，避免磁盘与数据库不一致
             throw e;
         }
-        return R.ok().data("contract", c);
+
+        // 《接口文档》6.1：合同上传后由后台自动触发 AI 审核。
+        // 这里刻意吞掉异常：AI 服务没启动不能让“上传”这个动作失败，
+        // 异步任务内部失败时会把合同状态退回 UPLOADED 并记录原因。
+        try {
+            Map<String, Object> ai = aiReviewService.triggerReview(c.getId());
+            return R.ok().data("contract", c).data("aiReview", ai);
+        } catch (Exception e) {
+            return R.ok().data("contract", c)
+                    .data("aiReviewWarning", "AI审核触发失败：" + e.getMessage());
+        }
     }
 
     // 5.2 合同列表
@@ -156,5 +177,19 @@ private String extractExt(String original) {
     int idx = original.lastIndexOf('.');
     if (idx <= 0 || idx == original.length() - 1) return null;
     return original.substring(idx + 1).toLowerCase();
+    }
+
+    /**
+     * 生成合同编号：CT + yyyyMMddHHmmss + 3 位随机数。
+     * <p>
+     * 旧实现是 {@code "CT" + 日期 + System.currentTimeMillis()}，会得到
+     * CT202609291790676948794 这种 24 位的一长串数字，列表页和详情页都很难看也不好念。
+     * 秒级时间 + 3 位随机已足够避免并发上传重号，同时保证可读性。
+     * </p>
+     */
+    private String generateContractNo() {
+        String ts = LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        int suffix = java.util.concurrent.ThreadLocalRandom.current().nextInt(100, 1000);
+        return "CT" + ts + suffix;
     }
 }

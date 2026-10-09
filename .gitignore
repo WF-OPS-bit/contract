@@ -40,3 +40,5 @@ build/
 app_test.log
 app_test.log.err
 *.log
+### 运行时上传的合同文件（UUID 命名，不入库）###
+upload/

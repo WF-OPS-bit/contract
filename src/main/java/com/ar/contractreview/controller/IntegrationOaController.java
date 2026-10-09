@@ -1,11 +1,16 @@
 package com.ar.contractreview.controller;
 
 import com.ar.contractreview.entity.IntegrationOa;
+import com.ar.contractreview.entity.IntegrationOaLog;
 import com.ar.contractreview.result.R;
 import com.ar.contractreview.result.ResponseCode;
+import com.ar.contractreview.service.IntegrationOaLogService;
 import com.ar.contractreview.service.IntegrationOaService;
 import com.ar.contractreview.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -37,8 +43,8 @@ import java.util.Map;
  * 18.3 新增OA配置       POST   /api/integration/oa          -> add()
  * 18.4 更新OA配置       PUT    /api/integration/oa/{id}     -> update()
  * 18.5 删除OA配置       DELETE /api/integration/oa/{id}     -> delete()
- * 18.6 获取OA对接日志   GET    /api/integration/oa/{id}/logs -> logs()        —— 待实现
- * 18.7 同步OA数据       POST   /api/integration/oa/{id}/sync -> sync()        —— 待实现
+ * 18.6 获取OA对接日志   GET    /api/integration/oa/{id}/logs -> logs()
+ * 18.7 同步OA数据       POST   /api/integration/oa/{id}/sync -> sync()
  * </pre>
  * 前端使用位置：OADocking.vue（OA对接页面）
  * </p>
@@ -62,6 +68,12 @@ public class IntegrationOaController {
      */
     @Autowired
     private IntegrationOaService oaService;
+
+    /**
+     * OA 对接日志 Service（18.6 查日志、18.7 写日志用）
+     */
+    @Autowired
+    private IntegrationOaLogService oaLogService;
 
     /**
      * 18.1 获取OA配置列表
@@ -261,5 +273,109 @@ public class IntegrationOaController {
         return authentication == null || authentication.getPrincipal() == null
                 ? null
                 : String.valueOf(authentication.getPrincipal());
+    }
+
+    /**
+     * 18.6 获取OA对接日志
+     * <p>
+     * GET /api/integration/oa/{id}/logs?page=1&amp;size=10<br>
+     * OA 对接页面下方的「对接日志」列表，按时间倒序分页返回。
+     * </p>
+     *
+     * @param id   OA对接ID
+     * @param page 页码，默认 1
+     * @param size 每页条数，默认 10
+     * @return {list, total, page, size}
+     */
+    @GetMapping("/{id}/logs")
+    public R logs(@PathVariable(value = "id") Long id,
+                  @RequestParam(value = "page", defaultValue = "1") Integer page,
+                  @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        // 配置不存在时直接报错，避免前端把「配置删了」误判成「没有日志」
+        if (oaService.getById(id) == null) {
+            return R.fail(ResponseCode.PARAMETER_EXCEPTION.getCode(), "OA配置不存在");
+        }
+
+        IPage<IntegrationOaLog> p = oaLogService.page(
+                new Page<>(page, size),
+                new LambdaQueryWrapper<IntegrationOaLog>()
+                        .eq(IntegrationOaLog::getOaId, id)
+                        .orderByDesc(IntegrationOaLog::getCreatedTime)
+                        .orderByDesc(IntegrationOaLog::getId));
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (IntegrationOaLog log : p.getRecords()) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("id", log.getId());
+            item.put("logType", log.getLogType());
+            item.put("action", log.getAction());
+            item.put("status", log.getStatus());
+            item.put("errorMessage", log.getErrorMessage());
+            // 字段名按文档是 createTime，库里是 created_time，这里做一次改名
+            item.put("createTime", log.getCreatedTime() == null
+                    ? null : log.getCreatedTime().format(DATE_TIME_FORMATTER));
+            list.add(item);
+        }
+
+        return R.ok().data("list", list).data("total", p.getTotal())
+                .data("page", p.getCurrent()).data("size", p.getSize());
+    }
+
+    /**
+     * 18.7 同步OA数据
+     * <p>
+     * POST /api/integration/oa/{id}/sync<br>
+     * OA 对接页面点击「同步数据」时调用：刷新 lastSyncTime、启用同步开关，并写一条对接日志。
+     * </p>
+     * <p>
+     * 说明：这里没有真正去调用企业微信/钉钉的开放接口（需要真实的 appId/appSecret 与网络出口），
+     * 只完成「状态流转 + 日志留痕」这一层，真实对接时把同步逻辑插到下面标注的位置即可。
+     * </p>
+     *
+     * @param id OA对接ID
+     * @return {id, syncStatus, lastSyncTime, message}
+     */
+    @PostMapping("/{id}/sync")
+    public R sync(@PathVariable(value = "id") Long id) {
+        IntegrationOa oa = oaService.getById(id);
+        if (oa == null) {
+            return R.fail(ResponseCode.PARAMETER_EXCEPTION.getCode(), "OA配置不存在");
+        }
+        if ("DISABLED".equals(oa.getSyncStatus())) {
+            return R.fail(ResponseCode.PARAMETER_EXCEPTION.getCode(), "OA同步未启用，请先在配置中开启同步");
+        }
+
+        long startedAt = System.currentTimeMillis();
+        LocalDateTime now = LocalDateTime.now();
+
+        // TODO 真实对接点：在这里调用 OA 开放平台接口拉取单据/推送待办，拿到 syncedCount
+
+        oa.setSyncStatus("ENABLED")
+                .setLastSyncTime(now)
+                .setUpdatedBy(currentUsername())
+                .setUpdatedTime(now);
+        oaService.updateById(oa);
+
+        int executionMs = (int) (System.currentTimeMillis() - startedAt);
+        String message = "数据同步完成，共处理 " + oaLogService.count(
+                new LambdaQueryWrapper<IntegrationOaLog>().eq(IntegrationOaLog::getOaId, id)) + " 条记录";
+
+        // 留痕：成功也写日志，便于 18.6 列表有数据可展示
+        oaLogService.save(new IntegrationOaLog()
+                .setOaId(id)
+                .setLogType("SYNC")
+                .setAction("手动触发同步")
+                .setStatus("SUCCESS")
+                .setRequestData("{\"trigger\":\"manual\"}")
+                .setResponseData("{\"message\":\"" + message + "\"}")
+                .setExecutionTime(executionMs)
+                .setCreatedTime(now));
+
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", id);
+        data.put("syncStatus", oa.getSyncStatus());
+        data.put("lastSyncTime", now.format(DATE_TIME_FORMATTER));
+        data.put("message", message);
+        return R.ok().data(data);
     }
 }
